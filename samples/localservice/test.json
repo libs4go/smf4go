@@ -1,0 +1,17 @@
+{
+    "slf4go": {
+        "default": {
+            "backend": "console"
+        }
+    },
+    "smf4go": {
+        "service": {
+            "A": {
+                "Name": "A"
+            },
+            "B": {
+                "Name": "B"
+            }
+        }
+    }
+}
