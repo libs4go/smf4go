@@ -3,7 +3,7 @@ package localservice
 import (
 	"sync"
 
-	"github.com/dynamicgo/xerrors"
+	"github.com/libs4go/errors"
 	"github.com/libs4go/scf4go"
 	"github.com/libs4go/smf4go"
 )
@@ -52,7 +52,7 @@ func (extension *localServiceExtension) CreateSerivce(serviceName string, config
 	f, ok := extension.creators[serviceName]
 
 	if !ok {
-		return nil, xerrors.Wrapf(smf4go.ErrNotFound, "service %s not found", serviceName)
+		return nil, errors.Wrap(smf4go.ErrNotFound, "service %s not found", serviceName)
 	}
 
 	return f(config)
