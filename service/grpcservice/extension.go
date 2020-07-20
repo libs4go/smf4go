@@ -45,36 +45,76 @@ type Client interface {
 
 type registerImpl struct {
 	slf4go.Logger
-	provider string // provider serivce name
-	local    map[string]CreatorF
-	remote   map[string]ConnectorF
-	server   *grpc.Server
-	config   scf4go.Config
-	servces  []Service
+	provider     string // provider serivce name
+	local        map[string]CreatorF
+	remote       map[string]ConnectorF
+	server       *grpc.Server
+	config       scf4go.Config
+	servces      []Service
+	meshBulder   smf4go.MeshBuilder
+	localservice localservice.LocalService
+}
+
+// Option .
+type Option func(*registerImpl)
+
+// WithProvider .
+func WithProvider(name string) Option {
+	return func(register *registerImpl) {
+		register.provider = name
+	}
+}
+
+// WithMeshBuilder .
+func WithMeshBuilder(builder smf4go.MeshBuilder) Option {
+	return func(register *registerImpl) {
+		register.meshBulder = builder
+	}
+}
+
+// WithLocalService .
+func WithLocalService(localservice localservice.LocalService) Option {
+	return func(register *registerImpl) {
+		register.localservice = localservice
+	}
 }
 
 // New .
-func New(name string) Register {
+func New(name string, options ...Option) Register {
+
+	// localservice.Register(providerName, func(config scf4go.Config) (smf4go.Service, error) {
+	// 	return newBuiltinProvider(config)
+	// })
+
+	// return withProvider(name, providerName)
 
 	providerName := "grpcservice.default"
 
-	localservice.Register(providerName, func(config scf4go.Config) (smf4go.Service, error) {
-		return newBuiltinProvider(config)
-	})
-
-	return WithProvider(name, providerName)
-}
-
-// WithProvider create new grpc service extension with provider service name
-func WithProvider(name string, provider string) Register {
 	impl := &registerImpl{
-		Logger:   slf4go.Get("mxwservice"),
-		local:    make(map[string]CreatorF),
-		remote:   make(map[string]ConnectorF),
-		provider: provider,
+		Logger:     slf4go.Get("mxwservice"),
+		local:      make(map[string]CreatorF),
+		remote:     make(map[string]ConnectorF),
+		provider:   providerName,
+		meshBulder: smf4go.Builder(),
 	}
 
-	smf4go.Builder().RegisterExtension(impl)
+	for _, option := range options {
+		option(impl)
+	}
+
+	if impl.meshBulder == smf4go.Builder() {
+		impl.localservice = localservice.Get()
+	} else if impl.localservice == nil {
+		impl.localservice = localservice.New(impl.meshBulder)
+	}
+
+	if impl.provider == providerName {
+		impl.localservice.Register(providerName, func(config scf4go.Config) (smf4go.Service, error) {
+			return newBuiltinProvider(config)
+		})
+	}
+
+	impl.meshBulder.RegisterExtension(impl)
 
 	localservice.Register(name, func(config scf4go.Config) (smf4go.Service, error) {
 		impl.config = config

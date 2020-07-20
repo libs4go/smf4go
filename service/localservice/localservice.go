@@ -11,6 +11,11 @@ import (
 // F .
 type F func(config scf4go.Config) (smf4go.Service, error)
 
+// LocalService .
+type LocalService interface {
+	Register(name string, f F)
+}
+
 type registerEntry struct {
 	Name string
 	F    F
@@ -27,7 +32,7 @@ func newExtension() *localServiceExtension {
 	}
 }
 
-func (extension *localServiceExtension) register(name string, f F) {
+func (extension *localServiceExtension) Register(name string, f F) {
 	extension.creators[name] = f
 	extension.orders = append(extension.orders, registerEntry{
 		Name: name,
@@ -65,7 +70,8 @@ func (extension *localServiceExtension) End() error {
 var extension *localServiceExtension
 var once sync.Once
 
-func get() *localServiceExtension {
+// Get get sigleton LocalService
+func Get() LocalService {
 	once.Do(func() {
 		extension = newExtension()
 		smf4go.Builder().RegisterExtension(extension)
@@ -76,5 +82,13 @@ func get() *localServiceExtension {
 
 // Register .
 func Register(name string, f F) {
-	get().register(name, f)
+	Get().Register(name, f)
+}
+
+// New create LocalService with provider smf4go.MeshBuilder
+func New(builder smf4go.MeshBuilder) LocalService {
+	extension := newExtension()
+	builder.RegisterExtension(extension)
+
+	return extension
 }
