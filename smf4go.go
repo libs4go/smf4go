@@ -62,7 +62,8 @@ type meshBuilderImpl struct {
 	started         atomic.Value         // started
 }
 
-func newMeshBuilder() MeshBuilder {
+// NewMeshBuilder create new mesh builder
+func NewMeshBuilder() MeshBuilder {
 	impl := &meshBuilderImpl{
 		Logger:     slf4go.Get("smf4go"),
 		registers:  make(map[string]string),
@@ -198,7 +199,7 @@ var once sync.Once
 // Builder get mesh builder instance
 func Builder() MeshBuilder {
 	once.Do(func() {
-		meshBuilder = newMeshBuilder()
+		meshBuilder = NewMeshBuilder()
 	})
 
 	return meshBuilder
