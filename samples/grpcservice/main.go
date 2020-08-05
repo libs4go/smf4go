@@ -25,6 +25,7 @@ type grpcServer struct {
 
 func (s *grpcServer) GrpcHandler(server *grpc.Server) error {
 	logger.D("bind grpc server {@client}", fmt.Sprintf("%p", s.Client))
+
 	return nil
 }
 
