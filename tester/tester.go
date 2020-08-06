@@ -120,6 +120,10 @@ func (tester *testerImpl) Config(data string, codec string) Tester {
 func (tester *testerImpl) Run(f F) {
 	f(tester)
 
+	tester.LocalService().Register("smf4go.tester", func(config scf4go.Config) (smf4go.Service, error) {
+		return tester, nil
+	})
+
 	if err := slf4go.Config(tester.config.SubConfig("slf4go")); err != nil {
 		println(fmt.Sprintf("set slf4go config error: %s", err))
 		return
