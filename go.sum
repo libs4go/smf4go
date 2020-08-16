@@ -53,6 +53,8 @@ github.com/libs4go/sdi4go v0.0.0-20191107032536-9900892950bc/go.mod h1:250zgwSJ6
 github.com/libs4go/sdi4go v0.0.2 h1:muoUgNhby+Lk3X+gQ+cPX9nA9bWCPe0L4zDAouoL4oY=
 github.com/libs4go/sdi4go v0.0.2/go.mod h1:250zgwSJ6jRBGwEuk1iqXmT09fw9k4gxDhlIbbqFFSo=
 github.com/libs4go/sdi4go v0.0.3/go.mod h1:Svi0Rb3k+beTb28vHKIjs0KKSS/Ty7TMw1DM2hxQOTc=
+github.com/libs4go/sdi4go v0.0.5 h1:p4qWKr4ccifWCjiEpu8BOI+VDgPaiNUPvCrZCB3Ycic=
+github.com/libs4go/sdi4go v0.0.5/go.mod h1:Svi0Rb3k+beTb28vHKIjs0KKSS/Ty7TMw1DM2hxQOTc=
 github.com/libs4go/slf4go v0.0.2 h1:+VqpreDOkjqt/9PT22XepbHv5/jPtiCQ1mb4kd8KGEg=
 github.com/libs4go/slf4go v0.0.2/go.mod h1:OWacxmrtRCiUHnHF/ndzEdHCucKjB+eoUXg/yMbj5W4=
 github.com/libs4go/slf4go v0.0.4 h1:TEnFk5yVZWeR6q56SxacOUWRarhvdzw850FikXnw6XM=
