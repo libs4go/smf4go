@@ -82,12 +82,6 @@ func WithLocalService(localservice localservice.LocalService) Option {
 // New .
 func New(name string, options ...Option) Register {
 
-	// localservice.Register(providerName, func(config scf4go.Config) (smf4go.Service, error) {
-	// 	return newBuiltinProvider(config)
-	// })
-
-	// return withProvider(name, providerName)
-
 	providerName := "grpcservice.default"
 
 	impl := &registerImpl{
@@ -216,6 +210,7 @@ func (extension *registerImpl) CreateSerivce(serviceName string, config scf4go.C
 	f2, ok := extension.remote[serviceName]
 
 	if ok {
+		extension.D("[{@serviceName}] grpc dial to {@remote}", serviceName, remote)
 		remote := config.Get("remote").String("")
 		conn, err := extension.Dial(context.Background(), remote, grpc.WithInsecure())
 
@@ -238,8 +233,6 @@ func (extension *registerImpl) getProvider() Provider {
 
 func (extension *registerImpl) dialOption(ctx context.Context) grpc.DialOption {
 	return grpc.WithDialer(func(remote string, timeout time.Duration) (net.Conn, error) {
-
-		extension.D("grpc dial to {@remote}", remote)
 
 		provider := extension.getProvider()
 
