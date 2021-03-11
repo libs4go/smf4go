@@ -210,8 +210,11 @@ func (extension *registerImpl) CreateSerivce(serviceName string, config scf4go.C
 	f2, ok := extension.remote[serviceName]
 
 	if ok {
-		extension.D("[{@serviceName}] grpc dial to {@remote}", serviceName, remote)
+
 		remote := config.Get("remote").String("")
+
+		extension.D("[{@serviceName}] grpc dial to {@remote}", serviceName, remote)
+
 		conn, err := extension.Dial(context.Background(), remote, grpc.WithInsecure())
 
 		if err != nil {
