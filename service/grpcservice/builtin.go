@@ -33,6 +33,5 @@ func (provider *builtinProvider) Listener() net.Listener {
 }
 
 func (provider *builtinProvider) Connect(ctx context.Context, remote string) (net.Conn, error) {
-	provider.D("try connect to {@remote}", remote)
 	return net.Dial("tcp", remote)
 }
